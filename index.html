@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shuddhodhan Surwade | Portfolio</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Poppins", sans-serif;
+        background-color: #0d1117;
+        color: #c9d1d9;
+        line-height: 1.6;
+        overflow-x: hidden;
+      }
+      header {
+        background: linear-gradient(135deg, #161b22, #0d1117);
+        padding: 1.5rem 2rem;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+      }
+      nav {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .stats-section {
+        text-align: center;
+        padding: 2rem;
+      }
+      .stats-section img {
+        max-width: 100%;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        transition: transform 0.3s ease;
+      }
+      .stats-section img:hover {
+        transform: scale(1.02);
+      }
+      .project-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        padding: 2rem 0;
+      }
+      .project-card {
+        background: #161b22;
+        padding: 1.5rem;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      .project-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <h1>Shuddhodhan Surwade</h1>
+      </nav>
+    </header>
+    <section class="stats-section">
+      <h2>My GitHub Statistics</h2>
+      <img
+        src="https://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=sidz111&theme=github_dark"
+        alt="GitHub Profile Summary"
+      />
+      <img
+        src="https://github-readme-stats.vercel.app/api?username=sidz111&show_icons=true&theme=github_dark"
+        alt="GitHub Stats"
+      />
+      <img
+        src="https://github-readme-stats.vercel.app/api/top-langs/?username=sidz111&layout=compact&theme=github_dark"
+        alt="Most Used Languages"
+      />
+      <img
+        src="https://github-profile-trophy.vercel.app/?username=sidz111&theme=github_dark&no-frame=true&margin-w=15"
+        alt="GitHub Trophies"
+      />
+      <img
+        src="https://github-profile-summary-cards.vercel.app/api/cards/repos-per-language?username=sidz111&theme=github_dark"
+        alt="Repos per Language"
+      />
+      <img
+        src="https://github-profile-summary-cards.vercel.app/api/cards/most-commit-language?username=sidz111&theme=github_dark"
+        alt="Most Commit Language"
+      />
+      <img
+        src="https://github-profile-summary-cards.vercel.app/api/cards/stats?username=sidz111&theme=github_dark"
+        alt="General Stats"
+      />
+      <img
+        src="https://github-profile-summary-cards.vercel.app/api/cards/productive-time?username=sidz111&theme=github_dark"
+        alt="Productive Time"
+      />
+    </section>
+    <section id="projects">
+      <h2>My Projects</h2>
+      <div id="project-list" class="project-container"></div>
+    </section>
+    <script>
+      async function fetchGitHubProjects() {
+        try {
+          const response = await fetch(
+            "https://api.github.com/users/sidz111/repos"
+          );
+          if (!response.ok) throw new Error("Failed to fetch projects");
+          const projects = await response.json();
+          const projectContainer = document.getElementById("project-list");
+          projects.forEach((project) => {
+            const projectCard = document.createElement("div");
+            projectCard.classList.add("project-card");
+            projectCard.innerHTML = `
+              <h3>${project.name}</h3>
+              <p>${project.description || "No description available"}</p>
+              <a href="${project.html_url}" target="_blank">View Project</a>
+            `;
+            projectContainer.appendChild(projectCard);
+          });
+        } catch (error) {
+          console.error("Error fetching GitHub projects:", error);
+          const projectContainer = document.getElementById("project-list");
+          projectContainer.innerHTML =
+            "<p style='color: #ff6b6b;'>Unable to load projects at this time.</p>";
+        }
+      }
+      fetchGitHubProjects();
+    </script>
+  </body>
+</html>
