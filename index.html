@@ -180,6 +180,48 @@
         border-bottom: 2px solid var(--accent-color);
         display: inline-block;
       }
+
+      .profile-container {
+        display: flex;
+        align-items: center;
+        background: var(--card-bg);
+        padding: 1.5rem;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+      }
+
+      .profile-img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        margin-right: 1.5rem;
+        border: 3px solid var(--accent-color);
+      }
+
+      .profile-details h2 {
+        margin: 0;
+        font-size: 1.8rem;
+      }
+
+      .profile-details p {
+        margin: 5px 0;
+        color: #b0b0b0;
+      }
+
+      .profile-link {
+        display: inline-block;
+        margin-top: 0.5rem;
+        padding: 0.5rem 1rem;
+        background: var(--accent-color);
+        color: white;
+        border-radius: 6px;
+        text-decoration: none;
+      }
+
+      .profile-link:hover {
+        background: #1659b8;
+      }
     </style>
   </head>
   <body>
@@ -206,6 +248,7 @@
       </div>
 
       <div class="error-message" id="error-message"></div>
+      <div id="profile-info" class="profile-container"></div>
 
       <section id="stats-section" class="stats-grid"></section>
 
@@ -241,6 +284,31 @@
           showLoading(true);
           showError("");
 
+          // Fetch user profile data
+          const userResponse = await fetch(
+            `https://api.github.com/users/${username}`
+          );
+          if (!userResponse.ok) throw new Error("GitHub user not found");
+          const userData = await userResponse.json();
+
+          // Display user profile info
+          document.getElementById("profile-info").innerHTML = `
+      <img src="${
+        userData.avatar_url
+      }" alt="Profile Image" class="profile-img" />
+      <div class="profile-details">
+        <h2>${userData.name || username}</h2>
+        <p>${userData.bio || "No bio available"}</p>
+        <p>Followers: ${userData.followers} | Following: ${
+            userData.following
+          }</p>
+        <a href="${
+          userData.html_url
+        }" target="_blank" class="profile-link">View Profile</a>
+      </div>
+    `;
+
+          // Fetch and display stats
           const statsContainer = document.getElementById("stats-section");
           statsContainer.innerHTML = "";
 
@@ -268,7 +336,7 @@
             img.src = generateImageUrl(type, username);
             img.alt = type.replace(/-/g, " ");
             img.loading = "lazy";
-            img.style.width = "100%"; // Ensures the image fits properly in the container
+            img.style.width = "100%";
 
             card.appendChild(img);
             statsContainer.appendChild(card);
